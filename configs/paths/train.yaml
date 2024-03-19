@@ -1,0 +1,13 @@
+defaults:
+  - default
+
+#DATA
+# data_root: /mai_nas/BYS/brain_metastasis/preprocessed/SEV
+data_root: /mnt/BYS/dataset/SEV/
+label_root: /mai_nas/BYS/brain_metastasis/data/SEV/SEV_whole_label.xlsx
+
+
+
+# radiomics_root: /mai_nas/BYS/brain_metastasis/preprocessed/sev_analysis
+# test_radiomics_root: /mai_nas/BYS/brain_metastasis/preprocessed/tcga_analysis
+

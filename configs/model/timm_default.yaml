@@ -1,0 +1,31 @@
+_target_: timm.models.create_model
+model_name: "vit_base_patch16_224"
+pretrained: True
+pretrained_cfg: "augreg_in1k" # cfg name in timm   or    path of pre-trained weights
+in_chans: 4
+num_classes: 1
+
+
+
+
+# [ model_name.pretrained_cfg ]
+
+# resnet18 with imagenet1k : resnet18.tv_in1k
+# resnet50 with imagenet1k : resnet50.tv_in1k
+
+# effnet-b0 with imagenet1k : efficientnet_b0.ra_in1k 
+
+# ViT-S/16 with imagenet1k : vit_small_patch16_224.augreg_in1k 
+# ViT-S/16 with imagenet21k : vit_small_patch16_224.augreg_in21k 
+# ViT-B/16 with imagenet1k : vit_base_patch16_224.augreg_in1k 
+# ViT-B/16 with imagenet21k : vit_base_patch16_224.augreg_in21k 
+
+# DeiT-S/16 with imagenet1k : deit_small_patch16_224.fb_in1k 
+# DeiT-B/16 with imagenet1k : deit_base_patch16_224.fb_in1k 
+
+# Swin-S with imagenet1k : swin_small_patch4_window7_224.ms_in1k 
+# Swin-B with imagenet1k : swin_base_patch4_window7_224.ms_in1k 
+
+
+
+    

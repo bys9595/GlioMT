@@ -1,0 +1,27 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+  - _self_
+  - data: train
+  - hydra: default
+  - loss: bce
+  - metric: binary
+  - model: vit_base
+  - optimizer: adamw
+  - paths: train
+  - scheduler: default
+  - trainer: default
+
+# gpus: 3
+
+task_name: "train"
+cls_mode: "idh"
+
+
+random_seed: 1234
+
+custom_pretrained_pth: null
+resume: null
+pretrain_which_method: null

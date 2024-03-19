@@ -1,0 +1,4 @@
+_target_: src.loss.cb_loss.ClassBalancedLoss
+loss_type: focal
+beta : 0.999
+gamma : 2.0

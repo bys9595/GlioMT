@@ -1,0 +1,14 @@
+defaults:
+  - default
+
+#DATA
+# data_root: /mai_nas/BYS/brain_metastasis/preprocessed/TCGA
+data_root: /mnt/BYS/dataset/TCGA/
+label_root: /mai_nas/BYS/brain_metastasis/data/TCGA/TCGA_whole_label.xlsx 
+
+save_dir: null
+job_num: '' # /0
+
+# radiomics_root: /mai_nas/BYS/brain_metastasis/preprocessed/sev_analysis
+# test_radiomics_root: /mai_nas/BYS/brain_metastasis/preprocessed/tcga_analysis
+

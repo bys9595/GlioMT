@@ -1,0 +1,5 @@
+defaults:
+  - default
+
+batch_size: 1
+slice_percentile: 75

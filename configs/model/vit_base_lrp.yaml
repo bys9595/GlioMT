@@ -1,0 +1,6 @@
+_target_: src.models.ViT_LRP.create_model
+model_name: "vit_base_patch16_224"
+pretrained: False
+pretrained_cfg: "augreg_in1k" # cfg name in timm   or    path of pre-trained weights
+in_chans: 4
+num_classes: 1

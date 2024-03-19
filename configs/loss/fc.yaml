@@ -1,0 +1,2 @@
+_target_: src.loss.focal_loss.FocalLoss
+gamma: 2

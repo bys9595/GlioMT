@@ -1,0 +1,26 @@
+# DDP
+ddp:
+  world_size: 1
+  rank: 0
+  dist_url: '8888' # the port number here should be the same as the previous one
+  dist_backend: "nccl"
+  multiprocessing_distributed: False
+
+# set True to to ensure deterministic results
+# makes training slower but gives more reproducibility than just setting seeds
+deterministic: True
+
+amp: True
+
+start_epoch: 0  
+end_epoch: 50
+warmup_epochs: 5
+
+iter_per_epoch: 8
+early_stop_epooch: 20
+
+
+print_freq: 10
+saveckp_freq: 50
+
+

@@ -1,0 +1,22 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+  - _self_
+  - data: eval
+  - hydra: eval
+  - metric: binary
+  - model: timm_default
+  - paths: TCGA
+  - xai: vit_attmap
+
+gpus: 3
+
+task_name: "TCGA" # name of dataset
+
+cls_mode: "idh"
+
+best_thres: null
+
+ckpt: null
