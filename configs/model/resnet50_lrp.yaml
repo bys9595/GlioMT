@@ -1,6 +1,0 @@
-_target_: src.models.resnet.create_model
-model_name: "resnet50"
-pretrained: True
-pretrained_cfg: "tv_in1k" # cfg name in timm   or    path of pre-trained weights
-in_chans: 4
-num_classes: 1
