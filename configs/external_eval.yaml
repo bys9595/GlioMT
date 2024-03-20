@@ -7,13 +7,11 @@ defaults:
   - data: eval
   - hydra: eval
   - metric: binary
-  - model: timm_default
-  - paths: TCGA
-  - xai: vit_attmap
+  - model: multimodal_vit_base_xai
+  - paths: internal_eval
+  - xai: multimodal_vit_attmap
 
-gpus: 3
-
-task_name: "TCGA" # name of dataset
+# task_name: "TCGA" # name of dataset
 
 cls_mode: "idh"
 

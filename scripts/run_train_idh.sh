@@ -16,9 +16,7 @@ num_classes=1
 HYDRA_FULL_ERROR=1 python train.py \
                     loss=$loss metric=$metric model=$model \
                     cls_mode=$cls_mode random_seed=$random_seed model.num_classes=$num_classes paths=train \
-                    paths.time_dir=$now data.slice_percentile=$slice_percentile \
-                    # model.global_pool=$global_pool \
-                    # custom_pretrained_pth=$custom_pretrained_pth
+                    paths.time_dir=$now data.slice_percentile=$slice_percentile 
 
 # ----------------------------------------------------------------------------------------------------------------------------------------
 # INFERENCE

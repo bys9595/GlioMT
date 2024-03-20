@@ -9,8 +9,6 @@ import shutil
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
-import random
-import pickle
 
 class DirectroyMaker:
     sub_dir_type = ['model','log','config', 'images']
@@ -264,7 +262,6 @@ def adjust_learning_rate(optimizer, epoch, cfg):
             param_group["lr"] = lr * param_group["lr_scale"]
         else:
             param_group["lr"] = lr
-    return lr
 
  
 def get_learning_rate(optimizer):
@@ -295,3 +292,12 @@ def graph_plot(train_list, val_list, result_root_path, mode):
     plt.savefig(os.path.join(save_path, mode +'.png'))
     plt.close()
     plt.clf()
+
+
+def normalize_images(t1, t1c, t2, flair):
+    t1 = (t1 - t1.mean()) / max(t1.std(), 1e-8)
+    t1c = (t1c - t1c.mean()) / max(t1c.std(), 1e-8)
+    t2 = (t2 - t2.mean()) / max(t2.std(), 1e-8)
+    flair = (flair - flair.mean()) / max(flair.std(), 1e-8)
+    
+    return t1, t1c, t2, flair

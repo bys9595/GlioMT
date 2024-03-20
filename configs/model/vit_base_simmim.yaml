@@ -1,3 +1,0 @@
-_target_: src.models.ViT_simmim.VisionTransformer
-in_chans: 4
-num_classes: 1

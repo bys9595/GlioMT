@@ -1,2 +1,4 @@
-/train_clinical.py
-/train.py
+/data
+/exp
+/scripts
+/AA_label.xlsx

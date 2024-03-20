@@ -8,20 +8,15 @@ defaults:
   - hydra: default
   - loss: bce
   - metric: binary
-  - model: vit_base
+  - model: multimodal_vit_base
   - optimizer: adamw
   - paths: train
-  - scheduler: default
   - trainer: default
 
-# gpus: 3
+# task_name: "train"
 
-task_name: "train"
 cls_mode: "idh"
-
 
 random_seed: 1234
 
-custom_pretrained_pth: null
 resume: null
-pretrain_which_method: null

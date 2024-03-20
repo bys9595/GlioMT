@@ -7,18 +7,15 @@ defaults:
   - data: eval
   - hydra: eval
   - metric: binary
-  - model: timm_default
+  - model: multimodal_vit_base_xai
   - paths: internal_eval
-  - xai: vit_attmap
+  - xai: multimodal_vit_attmap
 
 
-gpus: 3
-
-task_name: "val" # 'val'' for validation set and 'test' for internal test set
+# task_name: "val" # 'val'' for internal validation set
 
 cls_mode: "idh"
 
 best_thres: null
 
 ckpt: null
-
