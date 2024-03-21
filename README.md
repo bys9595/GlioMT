@@ -13,17 +13,20 @@ Please cite this paper when you use this code.
 ## Installation
 Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
-### Setup
+## Training
 
+### CNN & Visual Transformer Models
 ```
-docker run -it --gpus all --privileged --net=host --pid=host --ipc=host -v --name cim_jigsaw 71e /bin/bash
+CUDA_VISIBLE_DEVICES=0 python train.py loss=bce metric=binary model=resnet50 cls_mode=idh model.num_classes=1 paths=train 
+CUDA_VISIBLE_DEVICES=0 python train.py loss=bce metric=binary model=vit_base cls_mode=idh model.num_classes=1 paths=train 
+```
+
+### Our Multimodal Transformer Models
+```
+CUDA_VISIBLE_DEVICES=0 python train_clinical.py loss=bce metric=binary model=multimodal_swin_small cls_mode=idh model.num_classes=1 paths=train 
 ```
 
 
-
-```
-CUDA_VISIBLE_DEVICES=1 HYDRA_FULL_ERROR=1 python train.py loss=bce metric=binary model=multimodal_vit_base cls_mode=idh model.num_classes=1 paths=train 
-```
 
 Create a new virtual environment and install all dependencies by:
 ### 1. Install Pytorch
