@@ -13,6 +13,53 @@ Please cite this paper when you use this code.
 ## Installation
 Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
+## Data Preparation
+Datasets must be located in the `data` folder. Within each dataset folder, the following structure is expected:
+
+```
+./data/Internal_set/
+├── subject001
+│   ├── subject001_T1.nii.gz
+│   ├── subject001_T1C.nii.gz
+│   ├── subject001_T2.nii.gz
+│   ├── subject001_FLAIR.nii.gz
+│
+├── subject002
+│   ├── subject002_T1.nii.gz
+│   ├── subject002_T1C.nii.gz
+│   ├── subject002_T2.nii.gz
+│   ├── subject002_FLAIR.nii.gz
+│
+│ ...
+```
+The label file (`.xlsx`) must be located outside the dataset folder, an example is as follows:
+```
+./data/
+├── Internal_set
+├── Internal_set.xlsx
+│...
+```
+
+### configs/paths
+When adding your dataset in `data` folder, you should modify the `.yaml` file in `configs/paths`.
+
+Example for `configs/paths/train.yaml`:
+```
+defaults:
+  - default
+
+#DATA
+data_root: /home/user/Multimodal_Transformer_Glioma/data/Internal_set/
+label_root: /home/user/Multimodal_Transformer_Glioma/data/Internal_set/Internal_set.xlsx
+
+save_dir: null
+job_num: ''
+
+task_name: "val"
+
+```
+
+
 ## Training
 
 ### CNN & Visual Transformer Models
