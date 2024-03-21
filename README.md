@@ -1,13 +1,16 @@
 # An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas According to the 2021 WHO Classification
 
-Official PyTorch codebase of Multimodal Transformer, a method for molecular subtyping and gradin in adult-type diffuse gliomas according to the 2021 WHO classification.
+
+![alt man](./figures/main_figure.png)
+
+Official PyTorch codebase of Multimodal Transformer, a method for molecular subtyping and grading in adult-type diffuse gliomas according to the 2021 WHO classification.
 
 Yunsu Byeon*, Yae Won Park*, Soohyun Lee, HyungSeob Shin, Doohyun Park, Sung Soo Ahn, Kyunghwa Han, Jong Hee Chang, Se Hoon Kim, Seung-Koo Lee, Dosik Hwang
 
 
 Please cite this paper when you use this code.
 
-## Install
+## Installation
 Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
 ### Setup
@@ -19,7 +22,7 @@ docker run -it --gpus all --privileged --net=host --pid=host --ipc=host -v --nam
 
 
 ```
-CUDA_VISIBLE_DEVICES=1 python train.py data=train loss=bce metric=binary model=vit_base paths=train cls_mode=idh model.num_classes=1
+CUDA_VISIBLE_DEVICES=1 HYDRA_FULL_ERROR=1 python train.py loss=bce metric=binary model=multimodal_vit_base cls_mode=idh model.num_classes=1 paths=train 
 ```
 
 Create a new virtual environment and install all dependencies by:
