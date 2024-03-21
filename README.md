@@ -10,6 +10,8 @@ Please cite this paper when you use this code.
 ---
 ## Install
 ---
+Please check [INSTALL.md](INSTALL.md) for installation instructions.
+
 ### Setup
 
 ```
