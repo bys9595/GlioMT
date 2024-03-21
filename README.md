@@ -17,13 +17,26 @@ Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
 ### CNN & Visual Transformer Models
 ```
-CUDA_VISIBLE_DEVICES=0 python train.py loss=bce metric=binary model=resnet50 cls_mode=idh model.num_classes=1 paths=train 
-CUDA_VISIBLE_DEVICES=0 python train.py loss=bce metric=binary model=vit_base cls_mode=idh model.num_classes=1 paths=train 
+# IDH mutation
+python train.py loss=bce metric=binary model=resnet50 cls_mode=idh model.num_classes=1
+
+# 1p/19q codeletion
+python train.py loss=bce metric=binary model=resnet50 cls_mode=1p_19q model.num_classes=1
+
+# CNS WHO Grade
+python train.py loss=ce metric=multiclass model=resnet50 cls_mode=grade model.num_classes=3
 ```
 
 ### Our Multimodal Transformer Models
 ```
-CUDA_VISIBLE_DEVICES=0 python train_clinical.py loss=bce metric=binary model=multimodal_swin_small cls_mode=idh model.num_classes=1 paths=train 
+# IDH mutation
+python train_multimodal.py loss=bce metric=binary model=multimodal_swin_small cls_mode=idh model.num_classes=1
+
+# IDH mutation
+python train_multimodal.py loss=bce metric=binary model=multimodal_swin_small cls_mode=1p_19q model.num_classes=1
+
+# IDH mutation
+python train_multimodal.py loss=ce metric=multiclass model=multimodal_swin_small cls_mode=idh model.num_classes=3
 ```
 
 
