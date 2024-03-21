@@ -1,5 +1,5 @@
 # An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas According to the 2021 WHO Classification
----
+
 Official PyTorch codebase of Multimodal Transformer, a method for molecular subtyping and gradin in adult-type diffuse gliomas according to the 2021 WHO classification.
 
 Yunsu Byeon*, Yae Won Park*, Soohyun Lee, HyungSeob Shin, Doohyun Park, Sung Soo Ahn, Kyunghwa Han, Jong Hee Chang, Se Hoon Kim, Seung-Koo Lee, Dosik Hwang
@@ -7,9 +7,7 @@ Yunsu Byeon*, Yae Won Park*, Soohyun Lee, HyungSeob Shin, Doohyun Park, Sung Soo
 
 Please cite this paper when you use this code.
 
----
 ## Install
----
 Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
 ### Setup

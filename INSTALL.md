@@ -1,7 +1,5 @@
 # Installation
----
 We provide installation instructions here.
----
 
 ### Clone our Repo
 ```
