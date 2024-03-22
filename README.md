@@ -44,7 +44,7 @@ The label file (`.xlsx`) must be located outside the dataset folder, an example 
 │...
 ```
 
-**configs/paths**
+### configs/paths
 When adding your dataset in `data` folder, you should modify the `.yaml` file in `configs/paths`.
 
 Example for `configs/paths/train.yaml`:
@@ -56,38 +56,46 @@ defaults:
 data_root: /home/user/Multimodal_Transformer_Glioma/data/Internal_set/
 label_root: /home/user/Multimodal_Transformer_Glioma/data/Internal_set/Internal_set.xlsx
 
-save_dir: null
-job_num: ''
-
-task_name: "val"
+task_name: "train"
 
 ```
+
+### Label Structure
+To use the code directly, create and use a label file in the format similar to `label_sample.xlsx`.
 
 
 ## Training
 
 **CNN & Visual Transformer Models**
 ```
+# Usage
+# bash ./scripts/run_train.sh {loss} {metric} {model} {cls_mode} {num_classes}
+
+
 # IDH mutation
-python train.py loss=bce metric=binary model=resnet50 cls_mode=idh model.num_classes=1
+bash ./scripts/run_train.sh bce binary resnet50 idh 1
 
 # 1p/19q codeletion
-python train.py loss=bce metric=binary model=resnet50 cls_mode=1p_19q model.num_classes=1
+bash ./scripts/run_train.sh bce binary vit_base 1p_19q 1
 
 # CNS WHO Grade
-python train.py loss=ce metric=multiclass model=resnet50 cls_mode=grade model.num_classes=3
+bash ./scripts/run_train.sh ce multiclass resnet50 grade 3
 ```
 
-**Our Multimodal Transformer Models**
+**Multimodal Transformer Models**
 ```
-# IDH mutation
-python train_multimodal.py loss=bce metric=binary model=multimodal_swin_small cls_mode=idh model.num_classes=1
+# Usage
+# bash ./scripts/run_multimodal_train.sh {loss} {metric} {model} {cls_mode} {num_classes}
+
 
 # IDH mutation
-python train_multimodal.py loss=bce metric=binary model=multimodal_swin_small cls_mode=1p_19q model.num_classes=1
+bash ./scripts/run_train_multimodal.sh bce binary multimodal_vit_base idh 1
 
-# IDH mutation
-python train_multimodal.py loss=ce metric=multiclass model=multimodal_swin_small cls_mode=idh model.num_classes=3
+# 1p/19q codeletion
+bash ./scripts/run_train_multimodal.sh bce binary multimodal_swin_small 1p_19q 1
+
+# CNS WHO Grade
+bash ./scripts/run_train_multimodal.sh ce multiclass multimodal_vit_base grade 3
 ```
 
 Our code's argument modification is based on [Hydra](https://hydra.cc/). To customize each argument to suit the user, modifications can be made in the `configs` folder.
@@ -95,17 +103,22 @@ Our code's argument modification is based on [Hydra](https://hydra.cc/). To cust
 
 
 ## Inference
-**2D**
+**CNN & Visual Transformer Models**
 ```
-python inference.py --cmd [cmd mode] --model [model] --cls_mode [class mode] --num_slice_per_patient [# slice] --gpus [gpus] --dimension 2d --resume [.pth 파일 경로]
+# Usage
+# bash ./scripts/run_eval.sh {metric} {model} {cls_mode} {num_classes} {checkpoint_path}
+
+
+# IDH mutation
+bash ./scripts/run_eval.sh binary multimodal_vit_base idh 1 [checkpoint path]
 ```
 
-**3D**
+**Multimodal Transformer Models**
 ```
-python inference.py --cmd [cmd mode] --model [model] --cls_mode [class mode] --gpus [gpus] --resume [.pth 파일 경로] --dimension 3d 
-```
+# Usage
+# bash ./scripts/run_eval_multimodal.sh {metric} {model} {cls_mode} {num_classes} {checkpoint_path}
 
-- cmd : Internal validation set을 할 거라면 'val' 선택 ,  External validation (TCGA) dataset 할 거라면 'test' 선택
-- cls_mode : 'idh', '1p_19q' 같이 원하는 모드 선택
-- num_slice_per_patient : max_roi_slice 중심으로 몇개의 slice 를 train/val 로 사용할지
-- model : resnet50 같은 모델명 설정
+
+# IDH mutation
+bash ./scripts/run_eval_multimodal.sh binary multimodal_vit_base idh 1 [checkpoint path]
+```

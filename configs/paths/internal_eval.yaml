@@ -1,9 +1,17 @@
-defaults:
-  - default
+# defaults:
+#   - default
 
-#DATA
-data_root: /mai_nas/BYS/Multimodal_Transformer_Glioma/data/AA_dataset/
-label_root: /mai_nas/BYS/Multimodal_Transformer_Glioma/data/AA_dataset/AA_label.xlsx
+# #DATA
+# data_root: /mai_nas/BYS/Multimodal_Transformer_Glioma/data/AA_dataset/
+# label_root: /mai_nas/BYS/Multimodal_Transformer_Glioma/data/AA_dataset/AA_label.xlsx
+
+# save_dir: null
+# job_num: ''
+
+# task_name: "val"
+
+defaults:
+  - train
 
 save_dir: null
 job_num: ''
