@@ -1,7 +1,7 @@
 # An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas According to the 2021 WHO Classification
 
 
-![alt man](./figures/main_figure2.png)
+![alt man](./figures/main_figure.png)
 
 Official PyTorch codebase of Multimodal Transformer, a method for molecular subtyping and grading in adult-type diffuse gliomas according to the 2021 WHO classification.
 
