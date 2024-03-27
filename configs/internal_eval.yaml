@@ -7,12 +7,8 @@ defaults:
   - data: eval
   - hydra: eval
   - metric: binary
-  - model: multimodal_vit_base_xai
+  - model: multimodal_swin_small
   - paths: internal_eval
-  - xai: multimodal_vit_attmap
-
-
-# task_name: "val" # 'val'' for internal validation set
 
 cls_mode: "idh"
 

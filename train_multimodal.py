@@ -174,11 +174,12 @@ class Brain_Dataset(Dataset):
 
         # Setting input axial slice configuration according to slice percentile (%) -------------------------------------------------------------
         z_seg = seg.sum(-1).sum(-1)
-        if self.slice_percentile <= 1:
-            roi_idx_list = [np.argmax(z_seg)]
+        glioma_vol_lower_bound = np.percentile(z_seg[z_seg.nonzero()[0]], 100-self.slice_percentile, axis=0)
+        roi_mask = z_seg > glioma_vol_lower_bound
+        
+        if roi_mask.sum() == 0:
+            roi_idx_list = [np.argmax(z_seg)] # Maximum Tumor Area
         else:
-            glioma_vol_lower_bound = np.percentile(z_seg[z_seg.nonzero()[0]], 100-self.slice_percentile, axis=0)
-            roi_mask = z_seg > glioma_vol_lower_bound
             roi_idx_list = np.where(roi_mask==True)[0].tolist()
         
         roi_random_idx = random.choice(roi_idx_list)

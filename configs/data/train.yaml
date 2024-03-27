@@ -1,0 +1,4 @@
+defaults:
+  - default
+
+slice_percentile: 75

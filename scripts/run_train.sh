@@ -9,10 +9,12 @@ model=$3
 cls_mode=$4
 num_classes=$5
 
+random_seed=1234
+
 HYDRA_FULL_ERROR=1 python train.py \
                     loss=$loss metric=$metric model=$model \
                     cls_mode=$cls_mode model.num_classes=$num_classes \
-                    paths=train paths.time_dir=$now
+                    paths=train paths.time_dir=$now random_seed=$random_seed
 
 
 # -----------------------------------------------------------------------------------------------------------------------

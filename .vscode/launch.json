@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "loss=bce",
+                "model=vit_base",
+                "cls_mode=idh",
+                "random_seed=4325",
+                "model.num_classes=1",
+                "metric=binary",
+                "paths=train",
+                "paths.root_dir=/mai_nas/BYS/Multimodal_Transformer_Glioma",
+                "paths.data_root=/mnt/BYS/dataset/SEV/",
+                "paths.label_root=/mai_nas/BYS/brain_metastasis/data/SEV/SEV_whole_label.xlsx",
+                "data.slice_percentile=0.1"
+            ]
+        }
+    ]
+}
