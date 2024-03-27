@@ -54,7 +54,7 @@ defaults:
 
 #DATA
 data_root: /home/user/Multimodal_Transformer_Glioma/data/Internal_set/
-label_root: /home/user/Multimodal_Transformer_Glioma/data/Internal_set/Internal_set.xlsx
+label_root: /home/user/Multimodal_Transformer_Glioma/data/Internal_set.xlsx
 
 task_name: "train"
 
