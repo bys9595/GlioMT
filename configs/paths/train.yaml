@@ -3,8 +3,6 @@ defaults:
 
 #DATA
 data_root: /home/user/Multimodal_Transformer_Glioma/data/SEV/
-# label_root: /mai_nas/BYS/brain_metastasis/data/SEV/SEV_whole_label.xlsx
-# data_root: /mai_nas/BYS/Multimodal_Transformer_Glioma/data/AA_dataset/
-label_root: /home/user/Multimodal_Transformer_Glioma/AA_label.xlsx
+label_root: /home/user/Multimodal_Transformer_Glioma/data/SEV_label.xlsx
 
 task_name: "train"

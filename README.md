@@ -61,7 +61,7 @@ task_name: "train"
 ```
 
 ### Label Structure
-To use the code directly, create and use a label file in the format similar to `label_sample.xlsx`.
+To use the code directly, create and use a label file in the format `./data/label_sample.xlsx`.
 
 
 ## Training
@@ -110,7 +110,7 @@ Our code's argument modification is based on [Hydra](https://hydra.cc/). To cust
 
 
 # IDH mutation
-bash ./scripts/run_eval.sh binary multimodal_vit_base idh 1 [checkpoint path]
+bash ./scripts/run_eval.sh binary multimodal_vit_base idh 1 ./exp/runs/idh/20240101/090000/
 ```
 
 **Multimodal Transformer Models**
@@ -120,5 +120,5 @@ bash ./scripts/run_eval.sh binary multimodal_vit_base idh 1 [checkpoint path]
 
 
 # IDH mutation
-bash ./scripts/run_eval_multimodal.sh binary multimodal_vit_base idh 1 [checkpoint path]
+bash ./scripts/run_eval_multimodal.sh binary multimodal_vit_base idh 1 ./exp/runs/idh/20240101/090000/
 ```

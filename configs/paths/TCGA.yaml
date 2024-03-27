@@ -2,9 +2,8 @@ defaults:
   - default
 
 #DATA
-# data_root: /mai_nas/BYS/brain_metastasis/preprocessed/TCGA
-data_root: /mnt/BYS/dataset/TCGA/
-label_root: /mai_nas/BYS/brain_metastasis/data/TCGA/TCGA_whole_label.xlsx 
+data_root: /home/user/Multimodal_Transformer_Glioma/data/TCGA/
+label_root: /home/user/Multimodal_Transformer_Glioma/data/TCGA_label.xlsx 
 
 save_dir: null
 job_num: '' # /0

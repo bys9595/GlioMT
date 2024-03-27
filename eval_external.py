@@ -167,7 +167,7 @@ def dataloader(cfg):
                                         ToTensord(keys=["image", "seg"]),
                                         ])
     
-    testset = Brain_Dataset(cfg.task_name, cfg, transform=test_transform)
+    testset = Brain_Dataset(cfg.paths.task_name, cfg, transform=test_transform)
     
 
     print("[!] Data Loading Done")
@@ -190,7 +190,7 @@ def main(cfg: DictConfig) -> Optional[float]:
     net = net.cuda()
     
     # Load Dataset
-    test_loader = dataloader(cfg, cfg.data.workers)
+    test_loader = dataloader(cfg)
 
     if cfg.ckpt:
         checkpoint = torch.load(cfg.ckpt)
@@ -293,7 +293,7 @@ def test(net, val_loader, cfg):
     metrics_dict = {i: metrics_dict[i] for i in sorteddict}
     
     if is_main_process():
-        logger = logging.getLogger(cfg.task_name)
+        logger = logging.getLogger(cfg.paths.task_name)
         print('[!] Evaluating the data in ' + str(cfg.paths.data_root))
         for key, value in metrics_dict.items():
             if isinstance(value, float):
