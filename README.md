@@ -14,6 +14,20 @@ Yunsu Byeon*, Yae Won Park*, Soohyun Lee, HyungSeob Shin, Doohyun Park, Sung Soo
 
 Initial commits
 
+## Abstract
+Please check [INSTALL.md](INSTALL.md) for installation instructions.
+
+
+
+## Model Weights
+
+|                   | CNN (model weight / log) | Visual Transformer (model weight / log) | GlioMT (model weight / log) |
+|:-----------------:|:------------------------:|:---------------------------------------:|:---------------------------:|
+| IDH mutation      |       VGG-19 / log       |               ViT-B / log               |       GlioMT_ViT / log      |
+| 1p/19q codeletion |    DenseNet-121 / log    |               Swin-S / log              |      GlioMT_Swin / log      |
+| Tumor Grade       |      ResNet-50 / log     |               Swin-S / log              |      GlioMT_Swin / log      |
+
+
 ## Installation
 Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
