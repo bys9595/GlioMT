@@ -442,7 +442,6 @@ def slice_ensemble(inputs, clinical_feats, net, criterion, targets, cfg):
     final_out = None
     total_loss = 0.0
     num_batches = (A + batch_size - 1) // batch_size  # Calculate number of batches
-
     for i in range(num_batches):
         start_idx = i * batch_size
         end_idx = min((i + 1) * batch_size, A)
@@ -450,7 +449,8 @@ def slice_ensemble(inputs, clinical_feats, net, criterion, targets, cfg):
         batch_input = inputs[start_idx:end_idx]  # Shape: (batch_size, S, H, W)
         
         # Forward pass through the network
-        outputs = net(batch_input, clinical_feats) # Shape: (batch_size, 1, H, W)
+        clinical_feats_batch = [cli * (end_idx - start_idx) for cli in clinical_feats]
+        outputs = net(batch_input, clinical_feats_batch) # Shape: (batch_size, 1, H, W)
         
         # Compute the loss for the batch
         batch_loss = criterion(outputs.squeeze(1), targets.repeat(end_idx - start_idx))
