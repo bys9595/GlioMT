@@ -22,7 +22,7 @@ Molecular subtyping and grading of adult-type diffuse gliomas are essential for 
 ## Model Weights
 Pre-trained models using the institutional set are available below.
 
-|                   | CNN | Visual Transformer | GlioMT |
+|                   | CNN | Visual Transformer | GlioMT (ours)|
 |:-----------------:|:------------------------:|:---------------------------------------:|:---------------------------:|
 | IDH mutation      |       [VGG-19](https://drive.google.com/file/d/1S-MZGCPEh4pn7ZBWA5j3Gb20kOdpQfwW/view?usp=drive_link)       |               [ViT-B](https://drive.google.com/file/d/1Gd4M52A5YI1YAbRc0PHlFdnDZHbJUQPc/view?usp=drive_link)           |       [GlioMT_ViT-B](https://drive.google.com/file/d/1VtRU3W_Tl_ghrsa2Fjpmr8Y-yJqaV_sn/view?usp=drive_link)    |
 | 1p/19q codeletion |    [DenseNet-121](https://drive.google.com/file/d/1iK2z0NrYDRMuiKJBaCbC3RVDGZpisWNT/view?usp=drive_link)    |               [Swin-S](https://drive.google.com/file/d/1H5VvbwVSPr-zsEJYeD_3VuL3nmdEOoMh/view?usp=drive_link)          |      [GlioMT_Swin-S](https://drive.google.com/file/d/1AkXwnEBg_M0f7eaF11TuSyqu6ktDCuPb/view?usp=drive_link)    |
