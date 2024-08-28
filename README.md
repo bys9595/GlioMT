@@ -1,9 +1,9 @@
-# An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas
+# GlioMT
 
 ![alt man](./figures/main.png)
 
-Official PyTorch codebase of Multimodal Transformer, a method for molecular subtyping and grading in adult-type diffuse gliomas according to the 2021 WHO classification.
 
+This repo is the official implementation of "An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas"
 Yunsu Byeon*, Yae Won Park*, Soohyun Lee, HyungSeob Shin, Doohyun Park, Sung Soo Ahn, Kyunghwa Han, Jong Hee Chang, Se Hoon Kim, Seung-Koo Lee, Dosik Hwang
 
 
