@@ -30,10 +30,10 @@ Pre-trained Models using institutional set.
 
 
 ## Getting Started
-## Installation
+### Installation
 Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
-## Data Preparation
+### Data Preparation
 Datasets must be located in the `data` folder. Within each dataset folder, the following structure is expected:
 
 ```
@@ -64,7 +64,7 @@ The label file (`.xlsx`) must be located outside the dataset folder, an example 
 │...
 ```
 
-### Modify the paths of configs
+**Modify the paths of configs**
 When adding your dataset in `data` folder, you should modify the `.yaml` file in `configs/paths`.
 
 Example for `configs/paths/train.yaml`:
@@ -80,7 +80,7 @@ task_name: "train"
 
 ```
 
-### Label Structure
+**Label Structure**
 To use the code directly, create and use a label file in the format `./data/label_sample.xlsx`.
 
 
