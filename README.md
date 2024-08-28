@@ -15,13 +15,15 @@ Yunsu Byeon*, Yae Won Park*, Soohyun Lee, HyungSeob Shin, Doohyun Park, Sung Soo
 Initial commits
 
 ## Abstract
-Please check [INSTALL.md](INSTALL.md) for installation instructions.
+Molecular subtyping and grading of adult-type diffuse gliomas are essential for treatment decisions and patient prognosis. Here, we introduce a robust interpretable multimodal transformer (GlioMT), incorporating imaging and clinical data, to predict the molecular subtype and grade of adult-type diffuse gliomas according to the 2021 WHO classification. GlioMT is trained on multiparametric MRI data from an institutional set of 1,053 patients with adult-type diffuse gliomas (144 oligodendrogliomas, 157 IDH-mutant astrocytomas, and 752 IDH-wildtype glioblastomas) to predict the IDH mutation status, 1p/19q codeletion status, and tumor grade. External validation is performed on 200 and 477 patients from the TCGA and UCSF sets, respectively. GlioMT outperforms conventional CNNs and visual transformers across multiple classification tasks with the highest AUCs for prediction of IDH mutation (0.92 on TCGA and 0.98 on UCSF), 1p/19q codeletion (0.85 on TCGA and 0.81 on UCSF), and grade (0.81 on TCGA and 0.91 on UCSF). Interpretability analysis revealed that GlioMT effectively highlighted tumor regions that are considered most discriminative, underscoring its potential to improve the reliability of clinical decision-making. 
+ 
+
 
 
 
 ## Model Weights
 
-|                   | CNN (model weight) | Visual Transformer (model weight ) | GlioMT (model weight) |
+|                   | CNN | Visual Transformer | GlioMT |
 |:-----------------:|:------------------------:|:---------------------------------------:|:---------------------------:|
 | IDH mutation      |       [VGG-19]       |               [ViT-B]           |       [GlioMT_ViT-B]    |
 | 1p/19q codeletion |    [DenseNet-121](https://drive.google.com/file/d/1iK2z0NrYDRMuiKJBaCbC3RVDGZpisWNT/view?usp=drive_link)    |               [Swin-S]          |      [GlioMT_Swin-S](https://drive.google.com/file/d/1AkXwnEBg_M0f7eaF11TuSyqu6ktDCuPb/view?usp=drive_link)    |
