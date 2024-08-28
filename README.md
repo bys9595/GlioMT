@@ -21,11 +21,11 @@ Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
 ## Model Weights
 
-|                   | CNN (model weight / log) | Visual Transformer (model weight / log) | GlioMT (model weight / log) |
+|                   | CNN (model weight) | Visual Transformer (model weight ) | GlioMT (model weight) |
 |:-----------------:|:------------------------:|:---------------------------------------:|:---------------------------:|
-| IDH mutation      |       VGG-19 / log       |               ViT-B / log               |       GlioMT_ViT / log      |
-| 1p/19q codeletion |    DenseNet-121 / log    |               Swin-S / log              |      GlioMT_Swin / log      |
-| Tumor Grade       |      ResNet-50 / log     |               Swin-S / log              |      GlioMT_Swin / log      |
+| IDH mutation      |       VGG-19       |               ViT-B           |       GlioMT_ViT-B    |
+| 1p/19q codeletion |    DenseNet-121    |               Swin-S          |      GlioMT_Swin-S    |
+| Tumor Grade       |      ResNet-50     |               Swin-S          |      GlioMT_Swin-S    |
 
 
 ## Installation
