@@ -3,17 +3,17 @@ We provide installation instructions here.
 
 ### Clone our Repo
 ```
-git clone https://github.com/bys9595/Multimodal_Transformer_Glioma.git
-cd Multimodal_Transformer_Glioma
+git clone https://github.com/bys9595/GlioMT.git
+cd GlioMT
 ```
 
 
 ### Build Docker
-The simplest way to use Multimodal Transformer is to build our dockerfile, which has contained all the needed dependencies. 
+The simplest way to use GlioMT is to build our dockerfile, which has contained all the needed dependencies. 
 
 ```
-docker build -t mtg .
-docker run -it --gpus all --net=host --pid=host --ipc=host -v .:/home/user/Multimodal_Transformer_Glioma/ --name mtg_container mtg:latest /bin/bash
+docker build -t gliomt .
+docker run -it --gpus all --net=host --pid=host --ipc=host -v .:/home/user/GlioMT/ --name gliomt_container gliomt:latest /bin/bash
 ```
 
 
