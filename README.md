@@ -19,15 +19,13 @@ Molecular subtyping and grading of adult-type diffuse gliomas are essential for 
  
 
 
-
-
 ## Model Weights
 
 |                   | CNN | Visual Transformer | GlioMT |
 |:-----------------:|:------------------------:|:---------------------------------------:|:---------------------------:|
-| IDH mutation      |       [VGG-19]       |               [ViT-B]           |       [GlioMT_ViT-B]    |
-| 1p/19q codeletion |    [DenseNet-121](https://drive.google.com/file/d/1iK2z0NrYDRMuiKJBaCbC3RVDGZpisWNT/view?usp=drive_link)    |               [Swin-S]          |      [GlioMT_Swin-S](https://drive.google.com/file/d/1AkXwnEBg_M0f7eaF11TuSyqu6ktDCuPb/view?usp=drive_link)    |
-| Tumor Grade       |      [ResNet-50]     |               [Swin-S]          |      [GlioMT_Swin-S]    |
+| IDH mutation      |       [VGG-19](https://drive.google.com/file/d/1S-MZGCPEh4pn7ZBWA5j3Gb20kOdpQfwW/view?usp=drive_link)       |               [ViT-B](https://drive.google.com/file/d/1Gd4M52A5YI1YAbRc0PHlFdnDZHbJUQPc/view?usp=drive_link)           |       [GlioMT_ViT-B](https://drive.google.com/file/d/1VtRU3W_Tl_ghrsa2Fjpmr8Y-yJqaV_sn/view?usp=drive_link)    |
+| 1p/19q codeletion |    [DenseNet-121](https://drive.google.com/file/d/1iK2z0NrYDRMuiKJBaCbC3RVDGZpisWNT/view?usp=drive_link)    |               [Swin-S](https://drive.google.com/file/d/1H5VvbwVSPr-zsEJYeD_3VuL3nmdEOoMh/view?usp=drive_link)          |      [GlioMT_Swin-S](https://drive.google.com/file/d/1AkXwnEBg_M0f7eaF11TuSyqu6ktDCuPb/view?usp=drive_link)    |
+| Tumor Grade       |      [ResNet-50](https://drive.google.com/file/d/1YT0ggGdCes8MQiwxLCGKcbRxp_24bqdh/view?usp=drive_link)     |               [Swin-S](https://drive.google.com/file/d/1WdVsL1psAeVx0arMztKPwa1PNsH0I7b2/view?usp=drive_link)          |      [GlioMT_Swin-S](https://drive.google.com/file/d/1lnasGRbYbA5c3cPmZa0kBwJkixCrV9Sj/view?usp=drive_link)    |
 
 
 ## Installation
