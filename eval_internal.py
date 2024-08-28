@@ -69,7 +69,7 @@ class Brain_Dataset(Dataset):
             mask = mutation
         elif self.cls_mode == 'grade':
             name_list = np.array(df_from_excel['Anony_ID'])
-            cls_list = np.array(df_from_excel['WHO Grade']) # LGG : 0,  HGG : 1
+            cls_list = np.array(df_from_excel['Tumor Grade']) # LGG : 0,  HGG : 1
             cls_list = cls_list - 2 # Grade 2, 3, 4 -> 0, 1, 2
             mask = None
         
