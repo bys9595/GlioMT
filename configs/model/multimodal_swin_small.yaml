@@ -1,7 +1,7 @@
 _target_: src.models.multimodal_swin.create_swint_model
 model_name: "swin_small_patch4_window7_224"
 pretrained: True
-pretrained_cfg: "ms_in1k" # cfg name in timm   or    path of pre-trained weights
+pretrained_cfg: "ms_in22k_ft_in1k" # cfg name in timm   or    path of pre-trained weights
 pretrained_strict: False 
 in_chans: 4
 num_classes: 1

@@ -9,7 +9,7 @@ end_epoch: 50
 warmup_epochs: 5 # warmup start
 
 iter_per_epoch: 8
-early_stop_epooch: 20 # early stop patience
+early_stop_epooch: 15 # early stop patience
 
 print_freq: 10 # print frequency
 

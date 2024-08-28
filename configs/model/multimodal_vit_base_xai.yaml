@@ -1,7 +1,7 @@
 _target_: src.models.multimodal_vit_xai.create_model
 model_name: "vit_base_patch16_224"
 pretrained: True
-pretrained_cfg: "augreg_in1k" # cfg name in timm   or    path of pre-trained weights
+pretrained_cfg: "augreg_in21k_ft_in1k" # cfg name in timm   or    path of pre-trained weights
 pretrained_strict: False 
 in_chans: 4
 num_classes: 1
@@ -11,4 +11,3 @@ embed_trainable: False
 clini_embed_token: "cls"
 fusion_style: "self-attn"
 age_cutoff: 45
-
