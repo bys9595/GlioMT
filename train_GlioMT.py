@@ -1,13 +1,3 @@
-'''
-Classification Mode selection
-
-- idh : binary, mutant vs wildtype
-- 1p_19q : binary, mutant+codeletion vs mutant+no-codeletion
-- subtype : 3-class, Mutant + 1p/19q codeletion  vs  Mutant + 1p/19q no codeletion  vs  Wildtype
-- lgg_hgg : binary,  LGG vs HGG
-- grade : 3-class,    Grade 2 vs Grade 3 vs Grade 4
-
-'''
 import torch
 import torch.backends.cudnn as cudnn
 from torch.utils.data import Dataset
@@ -31,6 +21,7 @@ from src.utils import adjust_learning_rate, save_on_master, graph_plot, AverageM
 import hydra
 from omegaconf import DictConfig
 from typing import Optional
+from src.utils import seed_everything
 
 # A logger for this file
 logger = logging.getLogger(__name__)
@@ -40,12 +31,11 @@ warnings.filterwarnings(action='ignore')
 class Brain_Dataset(Dataset):
     def __init__(self, train_val_test, cfg, transform=None):
         self.train_val_test = train_val_test
-        self.cfg = cfg
         
+        self.cfg = cfg
         self.data_root = cfg.paths.data_root
         self.label_root = cfg.paths.label_root
         self.slice_percentile = cfg.data.slice_percentile
-
         self.cls_mode = cfg.cls_mode
         self.k_fold = cfg.data.k_fold  
         self.fold_num = cfg.data.fold_num  
@@ -252,19 +242,6 @@ def dataloader(cfg):
     return train_loader, valid_loader
 
 
-def seed_everything(cfg: DictConfig)->None:
-    os.environ["PL_GLOBAL_SEED"] = str(cfg.random_seed)
-    os.environ["PL_SEED_WORKERS"] = f"{int(cfg.data.workers)}"
-    
-    random.seed(cfg.random_seed)
-    np.random.seed(cfg.random_seed)
-    torch.manual_seed(cfg.random_seed)
-    torch.cuda.manual_seed(cfg.random_seed)
-    torch.cuda.manual_seed_all(cfg.random_seed)
-    
-    cudnn.benchmark = (not cfg.trainer.deterministic)
-    cudnn.deterministic = cfg.trainer.deterministic
-
 @hydra.main(version_base="1.3", config_path="./configs", config_name="train.yaml")
 def main(cfg: DictConfig) -> Optional[float]:
     print("[!] Multimodal Transformer for Glioma Subtyping and Grading According to WHO2021")
@@ -273,9 +250,11 @@ def main(cfg: DictConfig) -> Optional[float]:
     # Seed Setting
     seed_everything(cfg)
 
+    # Initialize Model
     net = hydra.utils.instantiate(cfg.model)
     net = net.cuda()
     
+    # Load Data
     train_loader, valid_loader = dataloader(cfg)
     print("[!] Data Loading Done")
     

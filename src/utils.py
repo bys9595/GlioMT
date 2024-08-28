@@ -301,3 +301,18 @@ def normalize_images(t1, t1c, t2, flair):
     flair = (flair - flair.mean()) / max(flair.std(), 1e-8)
     
     return t1, t1c, t2, flair
+
+
+
+def seed_everything(cfg: DictConfig)->None:
+    os.environ["PL_GLOBAL_SEED"] = str(cfg.random_seed)
+    os.environ["PL_SEED_WORKERS"] = f"{int(cfg.data.workers)}"
+    
+    random.seed(cfg.random_seed)
+    np.random.seed(cfg.random_seed)
+    torch.manual_seed(cfg.random_seed)
+    torch.cuda.manual_seed(cfg.random_seed)
+    torch.cuda.manual_seed_all(cfg.random_seed)
+    
+    cudnn.benchmark = (not cfg.trainer.deterministic)
+    cudnn.deterministic = cfg.trainer.deterministic

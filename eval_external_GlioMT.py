@@ -39,10 +39,7 @@ class Brain_Dataset(Dataset):
         self.data_root = cfg.paths.data_root
         self.label_root = cfg.paths.label_root
         self.slice_percentile = cfg.data.slice_percentile
-
         self.cls_mode = cfg.cls_mode
-        self.k_fold = cfg.data.k_fold  
-        self.fold_num = cfg.data.fold_num  
         
         self.transform = transform   
         
@@ -97,39 +94,6 @@ class Brain_Dataset(Dataset):
         
         return name_list, cls_list, clinical_feats
 
-        
-    def split_class_balanced_data(self, img_name_array, cls_array, k_fold, k):   
-        '''
-        k_fold : total num of fold
-        k : fold num
-        '''
-        train_name_list = []
-        train_cls_list = []
-
-        test_name_list = []
-        test_cls_list = []
-        
-        unique = np.unique(cls_array)
-        
-        for cls in unique:
-            mask = (cls_array == cls)
-            temp_name_list = img_name_array[mask]
-            
-            len_train = 0
-            for i in range(k_fold):
-                if i == k:
-                    test_name_temp = temp_name_list[k::k_fold]
-                    test_name_list += test_name_temp.tolist()
-                else:
-                    train_name_temp = temp_name_list[i::k_fold]
-                    train_name_list += train_name_temp.tolist()
-                    len_train += len(train_name_temp.tolist())
-            
-            test_cls_list += [cls] * len(test_name_temp)
-            train_cls_list += [cls] * len_train
-        
-        return train_name_list, train_cls_list, test_name_list, test_cls_list  
-        
     def __getitem__(self, idx):        
         name = self.img_name_list[idx]
         
