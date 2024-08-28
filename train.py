@@ -456,8 +456,6 @@ def val(criterion, net, epoch, val_loader, writer, cfg):
             if cfg.trainer.amp:
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
                     outputs, loss = slice_ensemble(inputs, net, criterion, targets, cfg)
-                        
-                    loss = criterion(outputs.squeeze(1), targets)
             else:
                 outputs = net(inputs)
                 

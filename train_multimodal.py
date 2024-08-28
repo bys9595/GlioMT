@@ -174,27 +174,33 @@ class Brain_Dataset(Dataset):
 
         # Setting input axial slice configuration according to slice percentile (%) -------------------------------------------------------------
         z_seg = seg.sum(-1).sum(-1)
-        glioma_vol_lower_bound = np.percentile(z_seg[z_seg.nonzero()[0]], 100-self.slice_percentile, axis=0)
-        roi_mask = z_seg > glioma_vol_lower_bound
         
-        if roi_mask.sum() == 0:
-            roi_idx_list = [np.argmax(z_seg)] # Maximum Tumor Area
+        if len(z_seg) * self.slice_percentile < 1:
+            roi_idx_list = [np.argmax(z_seg)]
         else:
+            glioma_vol_lower_bound = np.percentile(z_seg[z_seg.nonzero()[0]], 100-self.slice_percentile, axis=0)
+            roi_mask = z_seg > glioma_vol_lower_bound
             roi_idx_list = np.where(roi_mask==True)[0].tolist()
-        
-        roi_random_idx = random.choice(roi_idx_list)
-        img_npy_2d = img_npy[:, roi_random_idx] #CHW
         # ---------------------------------------------------------------------------------------------------------------------------------------
         label = np.array(self.cls_list[idx])
         label = torch.from_numpy(label).long()
         
-        data_dict = {'image' : img_npy_2d, 'label' : label, 'name' : name, 'clinical_feats': clinical_feats}
+        if self.train_val_test in ['train']:
+            roi_random_idx = random.choice(roi_idx_list)
+            img_npy_2d = img_npy[:, roi_random_idx] #CHW
+            data_dict = {'image' : img_npy_2d, 'label' : label, 'name' : name, 'clinical_feats': clinical_feats}
+        else:
+            img_npy_2d = img_npy[:, roi_idx_list] # C x S x H x W
+            S, A, H, W = img_npy_2d.shape
+            img_npy_2d = img_npy_2d.reshape(S*A, H, W)
+            
+            data_dict = {'image' : img_npy_2d, 'label' : label, 'name' : name, 'clinical_feats': clinical_feats}
         
         if self.transform is not None:
             data_dict = self.transform(data_dict)
                 
-    
         return data_dict
+
 
 
 def dataloader(cfg):    
@@ -424,6 +430,30 @@ def train(criterion, optimizer, net, epoch, train_loader, writer, scaler, cfg):
 
     return train_losses.avg, auc.item()
 
+def slice_ensemble(inputs, clinical_feats, net, criterion, targets, cfg):
+    B, SA, H, W = inputs.shape
+    S, A = cfg.model.in_chans, SA // cfg.model.in_chans
+    inputs = inputs.view(B, S, A, H, W).contiguous()
+    
+    loss = 0
+    
+    for i in range(A):
+        slice_input = inputs[:, :, i]
+        
+        outputs = net(slice_input, clinical_feats)
+        
+        loss = loss + criterion(outputs.squeeze(1), targets)
+
+        if i ==0 :
+            final_out = outputs.detach().cpu()
+        else:
+            final_out += outputs.detach().cpu()
+        
+    final_out /= A
+    loss /= A
+    
+    return final_out, loss
+
 def val(criterion, net, epoch, val_loader, writer, cfg): 
     val_metrics = hydra.utils.instantiate(cfg.metric)
     val_losses = AverageMeter()
@@ -440,9 +470,8 @@ def val(criterion, net, epoch, val_loader, writer, cfg):
             
             if cfg.trainer.amp:
                 with torch.autocast(device_type='cuda', dtype=torch.float16):
-                    outputs = net(inputs, clinical_feats)
-                        
-                    loss = criterion(outputs.squeeze(1), targets)
+                    outputs, loss = slice_ensemble(inputs, clinical_feats, net, criterion, targets, cfg)
+
             else:
                 outputs = net(inputs, clinical_feats)
                 
