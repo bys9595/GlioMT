@@ -1,4 +1,4 @@
-# An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas According to the 2021 WHO Classification
+# An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas
 
 
 ![alt man](./figures/main_figure.png)
