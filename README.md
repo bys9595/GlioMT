@@ -29,6 +29,7 @@ Pre-trained Models using institutional set.
 | Tumor Grade       |      [ResNet-50](https://drive.google.com/file/d/1YT0ggGdCes8MQiwxLCGKcbRxp_24bqdh/view?usp=drive_link)     |               [Swin-S](https://drive.google.com/file/d/1WdVsL1psAeVx0arMztKPwa1PNsH0I7b2/view?usp=drive_link)          |      [GlioMT_Swin-S](https://drive.google.com/file/d/1lnasGRbYbA5c3cPmZa0kBwJkixCrV9Sj/view?usp=drive_link)    |
 
 
+## Getting Started
 ## Installation
 Please check [INSTALL.md](INSTALL.md) for installation instructions.
 
