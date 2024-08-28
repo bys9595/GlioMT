@@ -5,7 +5,7 @@ deterministic: True
 amp: True # Automatic mixed precision
 
 start_epoch: 0  
-end_epoch: 50
+end_epoch: 2 # default: 50
 warmup_epochs: 5 # warmup start
 
 iter_per_epoch: 8

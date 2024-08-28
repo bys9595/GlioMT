@@ -68,38 +68,40 @@ task_name: "train"
 To use the code directly, create and use a label file in the format `./data/label_sample.xlsx`.
 
 
+
+
 ## Training
 
 **CNN & Visual Transformer Models**
 ```
 # Usage
-# bash ./scripts/run_train.sh {loss} {metric} {model} {cls_mode} {num_classes}
+# bash ./scripts/run_train.sh {loss} {metric} {model} {cls_mode} {num_classes} {slice percentile}
 
 
 # IDH mutation
-bash ./scripts/run_train.sh bce binary resnet50 idh 1
+bash ./scripts/run_train.sh bce binary resnet50 idh 1 75
 
 # 1p/19q codeletion
-bash ./scripts/run_train.sh bce binary vit_base 1p_19q 1
+bash ./scripts/run_train.sh bce binary vit_base 1p_19q 1 75
 
 # CNS WHO Grade
-bash ./scripts/run_train.sh ce multiclass resnet50 grade 3
+bash ./scripts/run_train.sh ce multiclass resnet50 grade 3 25
 ```
 
 **Multimodal Transformer Models**
 ```
 # Usage
-# bash ./scripts/run_multimodal_train.sh {loss} {metric} {model} {cls_mode} {num_classes}
+# bash ./scripts/run_multimodal_train.sh {loss} {metric} {model} {cls_mode} {num_classes} {slice percentile}
 
 
 # IDH mutation
-bash ./scripts/run_train_multimodal.sh bce binary multimodal_vit_base idh 1
+bash ./scripts/run_train_multimodal.sh bce binary multimodal_vit_base idh 1 75
 
 # 1p/19q codeletion
-bash ./scripts/run_train_multimodal.sh bce binary multimodal_swin_small 1p_19q 1
+bash ./scripts/run_train_multimodal.sh bce binary multimodal_swin_small 1p_19q 1 75
 
 # CNS WHO Grade
-bash ./scripts/run_train_multimodal.sh ce multiclass multimodal_vit_base grade 3
+bash ./scripts/run_train_multimodal.sh ce multiclass multimodal_vit_base grade 3 25
 ```
 
 Our code's argument modification is based on [Hydra](https://hydra.cc/). To customize each argument to suit the user, modifications can be made in the `configs` folder.
@@ -110,19 +112,19 @@ Our code's argument modification is based on [Hydra](https://hydra.cc/). To cust
 **CNN & Visual Transformer Models**
 ```
 # Usage
-# bash ./scripts/run_eval.sh {metric} {model} {cls_mode} {num_classes} {checkpoint_path}
+# bash ./scripts/run_eval.sh {metric} {model} {cls_mode} {num_classes} {slice percentile} {checkpoint_path}
 
 
 # IDH mutation
-bash ./scripts/run_eval.sh binary multimodal_vit_base idh 1 ./exp/runs/idh/20240101/090000/
+bash ./scripts/run_eval.sh binary multimodal_vit_base idh 1 75 ./exp/runs/idh/20240101/090000/
 ```
 
 **Multimodal Transformer Models**
 ```
 # Usage
-# bash ./scripts/run_eval_multimodal.sh {metric} {model} {cls_mode} {num_classes} {checkpoint_path}
+# bash ./scripts/run_eval_multimodal.sh {metric} {model} {cls_mode} {num_classes} {slice percentile} {checkpoint_path}
 
 
 # IDH mutation
-bash ./scripts/run_eval_multimodal.sh binary multimodal_vit_base idh 1 ./exp/runs/idh/20240101/090000/
+bash ./scripts/run_eval_multimodal.sh binary multimodal_vit_base idh 1 75 ./exp/runs/idh/20240101/090000/
 ```

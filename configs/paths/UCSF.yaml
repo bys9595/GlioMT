@@ -1,0 +1,11 @@
+defaults:
+  - default
+
+#DATA
+data_root: /home/user/GlioMT/data/UCSF/
+label_root: /home/user/GlioMT/data/UCSF_whole_label.xlsx
+
+save_dir: null
+job_num: '' # /0
+
+task_name: "UCSF"

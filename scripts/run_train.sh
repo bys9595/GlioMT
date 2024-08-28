@@ -1,6 +1,6 @@
 # !/bin/bash
 
-export CUDA_VISIBLE_DEVICES="4" 
+export CUDA_VISIBLE_DEVICES="0" 
 now=$(date "+%Y%m%d")"/"$(date "+%H%M%S")
 
 loss=$1
@@ -8,7 +8,8 @@ metric=$2
 model=$3
 cls_mode=$4
 num_classes=$5
-train_kwargs=$6
+slice_percentile=$6
+train_kwargs=$7
 
 random_seed=1234
 
@@ -16,6 +17,7 @@ HYDRA_FULL_ERROR=1 python train.py \
                     loss=$loss metric=$metric model=$model \
                     cls_mode=$cls_mode model.num_classes=$num_classes \
                     paths=train paths.time_dir=$now random_seed=$random_seed \
+                    data.slice_percentile=$slice_percentile \
                     $train_kwargs
 
 
@@ -38,7 +40,8 @@ if [ "$cls_mode" == "grade" ];then
                 model=$model \
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
-                paths.time_dir=$eval_time
+                paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile
 
     # external validation
     python eval_external.py \
@@ -49,7 +52,8 @@ if [ "$cls_mode" == "grade" ];then
                 model=$model \
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
-                paths.time_dir=$eval_time
+                paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile
 
 else
     # internal validation
@@ -62,6 +66,7 @@ else
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
                 paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile \
                 | tee /dev/tty | grep 'RETURN:' | sed 's/RETURN: //')
 
 
@@ -75,6 +80,7 @@ else
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
                 paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile \
                 best_thres=$BEST_THRES
 fi
 

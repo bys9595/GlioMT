@@ -1,4 +1,4 @@
-batch_size: 64 
+batch_size: 8  #64
 workers: 8
 pin_memory: True
 aug_type: "heavy"

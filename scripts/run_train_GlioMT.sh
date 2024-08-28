@@ -5,17 +5,19 @@ now=$(date "+%Y%m%d")"/"$(date "+%H%M%S")
 
 loss=$1
 metric=$2
-model=$3 # multimodal_vit_base, multimodal_swin_small
+model=$3 # GlioMT_vit_base, GlioMT_swin_small
 cls_mode=$4
 num_classes=$5
-train_kwargs=$6
+slice_percentile=$6
+train_kwargs=$7
 
 random_seed=1234
 
-HYDRA_FULL_ERROR=1 python train_multimodal.py \
+HYDRA_FULL_ERROR=1 python train_GlioMT.py \
                     loss=$loss metric=$metric model=$model \
                     cls_mode=$cls_mode model.num_classes=$num_classes \
                     paths=train paths.time_dir=$now random_seed=$random_seed \
+                    data.slice_percentile=$slice_percentile \
                     $train_kwargs
 
 
@@ -30,7 +32,7 @@ eval_time=$(date "+%Y%m%d")"_"$(date "+%H%M%S")
 
 if [ "$cls_mode" == "grade" ];then 
     # internal validation
-    python eval_internal_multimodal.py \
+    python eval_internal_GlioMT.py \
                 ckpt=$ckpt_dir \
                 paths.save_dir=$save_dir \
                 paths=internal_eval \
@@ -38,10 +40,11 @@ if [ "$cls_mode" == "grade" ];then
                 model=$model \
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
+                data.slice_percentile=$slice_percentile \
                 paths.time_dir=$eval_time
 
     # external validation
-    python eval_external_multimodal.py \
+    python eval_external_GlioMT.py \
                 ckpt=$ckpt_dir \
                 paths.save_dir=$save_dir \
                 paths=TCGA \
@@ -49,10 +52,11 @@ if [ "$cls_mode" == "grade" ];then
                 model=$model \
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
+                data.slice_percentile=$slice_percentile \
                 paths.time_dir=$eval_time
 else
     # internal validation
-    BEST_THRES=$(python eval_internal_multimodal.py \
+    BEST_THRES=$(python eval_internal_GlioMT.py \
                 ckpt=$ckpt_dir \
                 paths.save_dir=$save_dir \
                 paths=internal_eval \
@@ -61,11 +65,12 @@ else
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
                 paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile \
                 | tee /dev/tty | grep 'RETURN:' | sed 's/RETURN: //')
 
 
     # external validation
-    python eval_external_multimodal.py \
+    python eval_external_GlioMT.py \
                 ckpt=$ckpt_dir \
                 paths.save_dir=$save_dir \
                 paths=TCGA \
@@ -74,5 +79,6 @@ else
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
                 paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile \
                 best_thres=$BEST_THRES
 fi

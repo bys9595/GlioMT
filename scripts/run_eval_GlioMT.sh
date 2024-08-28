@@ -7,15 +7,16 @@ metric=$1
 model=$2
 cls_mode=$3
 num_classes=$4
-save_dir=$5 # ./exp/runs/idh/20240101/090000
-eval_kwargs=$6
+slice_percentile=$5 # ./exp/runs/idh/20240101/090000
+save_dir=$6 # ./exp/runs/idh/20240101/090000
+eval_kwargs=$7
 
 ckpt_dir=$save_dir"/train/checkpoint_best_auc.pth"
 eval_time=$(date "+%Y%m%d")"_"$(date "+%H%M%S")
 
 if [ "$cls_mode" == "grade" ];then 
     # internal validation
-    python eval_internal_multimodal.py \
+    python eval_internal_GlioMT.py \
                 ckpt=$ckpt_dir \
                 paths.save_dir=$save_dir \
                 paths=internal_eval \
@@ -24,10 +25,11 @@ if [ "$cls_mode" == "grade" ];then
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
                 paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile \
                 $eval_kwargs
 
     # external validation
-    python eval_external_multimodal.py \
+    python eval_external_GlioMT.py \
                 ckpt=$ckpt_dir \
                 paths.save_dir=$save_dir \
                 paths=TCGA \
@@ -36,10 +38,11 @@ if [ "$cls_mode" == "grade" ];then
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
                 paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile \
                 $eval_kwargs
 else
     # internal validation
-    BEST_THRES=$(python eval_internal_multimodal.py \
+    BEST_THRES=$(python eval_internal_GlioMT.py \
                 ckpt=$ckpt_dir \
                 paths.save_dir=$save_dir \
                 paths=internal_eval \
@@ -48,12 +51,13 @@ else
                 cls_mode=$cls_mode \
                 model.num_classes=$num_classes \
                 paths.time_dir=$eval_time \
+                data.slice_percentile=$slice_percentile \
                 $eval_kwargs \
                 | tee /dev/tty | grep 'RETURN:' | sed 's/RETURN: //')
 
 
     # external validation
-    python eval_external_multimodal.py \
+    python eval_external_GlioMT.py \
                 ckpt=$ckpt_dir \
                 paths.save_dir=$save_dir \
                 paths=TCGA \
@@ -63,6 +67,7 @@ else
                 model.num_classes=$num_classes \
                 paths.time_dir=$eval_time \
                 best_thres=$BEST_THRES \
+                data.slice_percentile=$slice_percentile \
                 $eval_kwargs
 fi
 

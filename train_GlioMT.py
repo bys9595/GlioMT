@@ -244,9 +244,10 @@ def dataloader(cfg):
     
     train_loader = torch.utils.data.DataLoader(trainset, pin_memory=cfg.data.pin_memory, batch_size=cfg.data.batch_size,
                                                 shuffle=True, num_workers=cfg.data.workers)
-    
-    valid_loader = torch.utils.data.DataLoader(valset, pin_memory=cfg.data.pin_memory, batch_size=cfg.data.batch_size,
+    # batch size of valid_loader should be 1
+    valid_loader = torch.utils.data.DataLoader(valset, pin_memory=cfg.data.pin_memory, batch_size=1,
                                                 shuffle=True, num_workers=cfg.data.workers)
+    
     
     return train_loader, valid_loader
 
@@ -268,7 +269,7 @@ def seed_everything(cfg: DictConfig)->None:
 def main(cfg: DictConfig) -> Optional[float]:
     print("[!] Multimodal Transformer for Glioma Subtyping and Grading According to WHO2021")
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
+    
     # Seed Setting
     seed_everything(cfg)
 
@@ -430,29 +431,43 @@ def train(criterion, optimizer, net, epoch, train_loader, writer, scaler, cfg):
 
     return train_losses.avg, auc.item()
 
-def slice_ensemble(inputs, clinical_feats, net, criterion, targets, cfg):
-    B, SA, H, W = inputs.shape
-    S, A = cfg.model.in_chans, SA // cfg.model.in_chans
-    inputs = inputs.view(B, S, A, H, W).contiguous()
-    
-    loss = 0
-    
-    for i in range(A):
-        slice_input = inputs[:, :, i]
-        
-        outputs = net(slice_input, clinical_feats)
-        
-        loss = loss + criterion(outputs.squeeze(1), targets)
 
-        if i ==0 :
-            final_out = outputs.detach().cpu()
-        else:
-            final_out += outputs.detach().cpu()
-        
-    final_out /= A
-    loss /= A
+def slice_ensemble(inputs, clinical_feats, net, criterion, targets, cfg):
+    # inputs has the shape (1, SA, H, W)
+    _, SA, H, W = inputs.shape
+    S, A = cfg.model.in_chans, SA // cfg.model.in_chans
+    inputs = inputs[0].view(S, A, H, W).permute(1, 0, 2, 3).contiguous()
     
-    return final_out, loss
+    batch_size = cfg.data.batch_size
+    final_out = None
+    total_loss = 0.0
+    num_batches = (A + batch_size - 1) // batch_size  # Calculate number of batches
+
+    for i in range(num_batches):
+        start_idx = i * batch_size
+        end_idx = min((i + 1) * batch_size, A)
+
+        batch_input = inputs[start_idx:end_idx]  # Shape: (batch_size, S, H, W)
+        
+        # Forward pass through the network
+        outputs = net(batch_input, clinical_feats) # Shape: (batch_size, 1, H, W)
+        
+        # Compute the loss for the batch
+        batch_loss = criterion(outputs.squeeze(1), targets.repeat(end_idx - start_idx))
+        total_loss += batch_loss.mean() * (end_idx - start_idx)
+        
+        # Accumulate the outputs
+        if final_out is None:
+            final_out = outputs.detach().cpu().mean(0).unsqueeze(0) * (end_idx - start_idx)
+        else:
+            final_out += outputs.detach().cpu().mean(0).unsqueeze(0) * (end_idx - start_idx)
+    
+    # Average the accumulated outputs
+    final_out /= A
+    total_loss /= A
+    
+    return final_out, total_loss
+
 
 def val(criterion, net, epoch, val_loader, writer, cfg): 
     val_metrics = hydra.utils.instantiate(cfg.metric)
@@ -476,7 +491,8 @@ def val(criterion, net, epoch, val_loader, writer, cfg):
                 outputs = net(inputs, clinical_feats)
                 
                 loss = criterion(outputs.squeeze(1), targets)
-            
+                
+            outputs = outputs.float()
             val_metrics.update(outputs, targets)
             val_losses.update(loss.item(), inputs.size(0))
             
