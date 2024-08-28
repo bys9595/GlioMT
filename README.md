@@ -3,13 +3,16 @@
 ![alt man](./figures/main.png)
 
 
-This repo is the official implementation of "An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas"
+This repo is the official implementation of "An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas".
 
 Yunsu Byeon*, Yae Won Park*, Soohyun Lee, HyungSeob Shin, Doohyun Park, Sung Soo Ahn, Kyunghwa Han, Jong Hee Chang, Se Hoon Kim, Seung-Koo Lee, Dosik Hwang
 
 
-Please cite this paper when you use this code.
-Code will be updated when the paper is accepted.
+## Updates
+
+***28/08/2024***
+
+Initial commits
 
 ## Installation
 Please check [INSTALL.md](INSTALL.md) for installation instructions.
