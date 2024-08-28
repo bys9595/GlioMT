@@ -20,6 +20,7 @@ Molecular subtyping and grading of adult-type diffuse gliomas are essential for 
 
 
 ## Model Weights
+Pre-trained Models using institutional set.
 
 |                   | CNN | Visual Transformer | GlioMT |
 |:-----------------:|:------------------------:|:---------------------------------------:|:---------------------------:|
