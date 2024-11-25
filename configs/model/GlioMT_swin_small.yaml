@@ -1,0 +1,18 @@
+_target_: src.models.multimodal_swin.create_swint_model
+model_name: "swin_small_patch4_window7_224"
+pretrained: True
+pretrained_cfg: "ms_in22k_ft_in1k" # cfg name in timm   or    path of pre-trained weights
+pretrained_strict: False 
+in_chans: 4
+num_classes: 1
+decoder_depth: 2
+clini_info_style: "bert"
+embed_trainable: False
+clini_embed_token: "word"
+fusion_style: "self-attn"
+age_cutoff: 45
+clini: True
+mm_num_heads: 1
+
+
+  

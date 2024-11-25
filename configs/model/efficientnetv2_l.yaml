@@ -1,0 +1,9 @@
+_target_: timm.models.create_model
+model_name: "tf_efficientnetv2_l"
+pretrained: True
+pretrained_cfg: "in21k_ft_in1k" # cfg name in timm   or    path of pre-trained weights
+in_chans: 4
+num_classes: 1
+
+
+

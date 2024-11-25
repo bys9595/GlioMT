@@ -1,0 +1,8 @@
+defaults:
+  - default
+
+#DATA
+data_root: /home/user/GlioMT/data/SEV/
+label_root: /home/user/GlioMT/data/SEV_whole_label.xlsx
+
+task_name: "train"

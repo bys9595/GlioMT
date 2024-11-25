@@ -1,0 +1,16 @@
+# set True to to ensure deterministic results
+# makes training slower but gives more reproducibility than just setting seeds
+deterministic: True
+
+amp: True # Automatic mixed precision
+
+start_epoch: 0  
+end_epoch: 2 # default: 50
+warmup_epochs: 5 # warmup start
+
+iter_per_epoch: 8
+early_stop_epooch: 15 # early stop patience
+
+print_freq: 10 # print frequency
+
+

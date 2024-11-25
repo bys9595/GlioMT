@@ -1,0 +1,10 @@
+batch_size: 8  #64
+workers: 8
+pin_memory: True
+aug_type: "heavy"
+
+slice_percentile: 75 # input axial slice configuration
+training_size: 224 # input image size
+
+k_fold: 5 # number of folds in cross validation
+fold_num: 0 # fold number
