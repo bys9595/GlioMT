@@ -1,7 +1,0 @@
-defaults:
-  - train
-
-save_dir: null
-job_num: ''
-
-task_name: "val"
