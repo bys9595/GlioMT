@@ -1,0 +1,22 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+  - _self_
+  - data: train
+  - hydra: default
+  - loss: bce
+  - metric: binary
+  - model: multimodal_swin_small
+  - optimizer: adamw
+  - paths: train
+  - trainer: default
+
+# task_name: "train"
+
+cls_mode: "idh"
+
+random_seed: 1234
+
+resume: null
