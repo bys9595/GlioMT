@@ -15,5 +15,3 @@ The simplest way to use GlioMT is to build our dockerfile, which has contained a
 docker build -t gliomt .
 docker run -it --gpus all --net=host --pid=host --ipc=host -v /mai_nas:/mai_nas --name gliomt_container gliomt:latest /bin/bash
 ```
-
-
