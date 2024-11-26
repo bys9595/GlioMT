@@ -37,7 +37,7 @@ Please check [INSTALL.md](INSTALL.md) for installation instructions.
 Datasets must be located in the `data` folder. Within each dataset folder, the following structure is expected:
 
 ```
-./data/Internal_set/
+./data/Internal/
 ├── subject001
 │   ├── subject001_T1.nii.gz
 │   ├── subject001_T1C.nii.gz
@@ -52,11 +52,13 @@ Datasets must be located in the `data` folder. Within each dataset folder, the f
 │
 │ ...
 ```
+
+
 The label file (`.xlsx`) must be located outside the dataset folder, an example is as follows:
 ```
 ./data/
-├── Internal_set
-├── Internal_set_label.xlsx
+├── Internal
+├── Internal_label.xlsx
 ├── TCGA
 ├── TCGA_label.xlsx
 ├── UCSF
@@ -64,29 +66,32 @@ The label file (`.xlsx`) must be located outside the dataset folder, an example 
 │...
 ```
 
+`./sample/label_sample.xlsx` is an example label file.
+
+
 ### 3. Modify the paths of configs
 
 When adding your dataset in `data` folder, you should modify the `.yaml` file in `configs/paths`.
 
-Example for `configs/paths/train.yaml`:
+Training Example for `configs/paths/train.yaml`:
 ```
-defaults:
-  - default
 
-#DATA
-data_root: /home/user/GlioMT/data/Internal_set/
-label_root: /home/user/GlioMT/data/Internal_set.xlsx
-
+# Training DATA
+data_root: /home/user/GlioMT/data/Internal/
+label_root: /home/user/GlioMT/data/Internal_label.xlsx
+json_root: /home/user/GlioMT/data/dataset_Internal.json
 task_name: "train"
-
 ```
 
-### 4. Label Structure
+Validation Example for `configs/paths/TCGA.yaml`:
+```
 
-To use the code directly, create and use a label file in the format `./data/label_sample.xlsx`.
-
-
-
+# Validation DATA
+data_root: /home/user/GlioMT/data/TCGA/
+label_root: /home/user/GlioMT/data/TCGA_label.xlsx
+json_root: /home/user/GlioMT/data/dataset_TCGA.json
+task_name: "val"
+```
 
 ## Training
 

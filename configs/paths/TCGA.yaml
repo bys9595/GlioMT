@@ -6,6 +6,6 @@ data_root: /home/user/GlioMT/data/TCGA/
 label_root: /home/user/GlioMT/data/TCGA_whole_label.xlsx
 
 save_dir: null
-job_num: '' # /0
+job_num: ''
 
 task_name: "TCGA"

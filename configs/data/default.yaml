@@ -1,7 +1,6 @@
-batch_size: 8  #64
+batch_size: 64  #64
 workers: 8
 pin_memory: True
-aug_type: "heavy"
 
 slice_percentile: 75 # input axial slice configuration
 training_size: 224 # input image size

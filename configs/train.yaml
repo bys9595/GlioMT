@@ -8,7 +8,7 @@ defaults:
   - hydra: default
   - loss: bce
   - metric: binary
-  - model: multimodal_swin_small
+  - model: GlioMT_swin_small
   - optimizer: adamw
   - paths: train
   - trainer: default

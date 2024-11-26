@@ -199,27 +199,17 @@ def dataloader(cfg):
     elif isinstance(cfg.data.training_size, tuple):
         size = cfg.data.training_size
         
-    if cfg.data.aug_type == 'light':
-        transform =transforms.Compose([   
-                                        Resized(keys=["image"], spatial_size=size, mode="bicubic"),
-                                        RandGaussianNoised(keys=['image'], mean=0, std=0.1, prob=0.2),
-                                        RandGaussianSmoothd(keys=['image'], sigma_x=(0.5, 1.0), sigma_y=(0.5, 1.0), prob=0.2),
-                                        RandScaleIntensityd(keys=["image"], factors=0.25, prob=0.2),
-                                        RandAdjustContrastd(keys=['image'], gamma=(0.75, 1.25), prob=0.2),
-                                        ToTensord(keys=["image"])
-                                        ])
-    elif cfg.data.aug_type == 'heavy':
-        transform =transforms.Compose([   
-                                        Resized(keys=["image"], spatial_size=size, mode="bicubic"),
-                                        RandAffined(keys=["image"], mode="bilinear", prob=0.3, 
-                                                    rotate_range=(np.pi/12, np.pi/12), scale_range=(0.15, 0.15), shear_range=(0.15, 0.15), padding_mode="border"),
-                                        RandGaussianNoised(keys=['image'], mean=0, std=0.2, prob=0.3),
-                                        RandGaussianSmoothd(keys=['image'], sigma_x=(0.5, 1.0), sigma_y=(0.5, 1.0), prob=0.3),
-                                        RandScaleIntensityd(keys=["image"], factors=0.25, prob=0.3),
-                                        RandAdjustContrastd(keys=['image'], gamma=(0.75, 1.25), prob=0.3),
-                                        ToTensord(keys=["image"])
-                                        ])
-    
+    transform =transforms.Compose([   
+                                    Resized(keys=["image"], spatial_size=size, mode="bicubic"),
+                                    RandAffined(keys=["image"], mode="bilinear", prob=0.3, 
+                                                rotate_range=(np.pi/12, np.pi/12), scale_range=(0.15, 0.15), shear_range=(0.15, 0.15), padding_mode="border"),
+                                    RandGaussianNoised(keys=['image'], mean=0, std=0.2, prob=0.3),
+                                    RandGaussianSmoothd(keys=['image'], sigma_x=(0.5, 1.0), sigma_y=(0.5, 1.0), prob=0.3),
+                                    RandScaleIntensityd(keys=["image"], factors=0.25, prob=0.3),
+                                    RandAdjustContrastd(keys=['image'], gamma=(0.75, 1.25), prob=0.3),
+                                    ToTensord(keys=["image"])
+                                    ])
+
     val_transform = transforms.Compose([
                                         Resized(keys=["image"], spatial_size=size, mode="bicubic"),
                                         ToTensord(keys=["image"]),
