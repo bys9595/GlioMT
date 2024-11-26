@@ -75,7 +75,6 @@ When adding your dataset in `data` folder, you should modify the `.yaml` file in
 
 Training Example for `configs/paths/train.yaml`:
 ```
-
 # Training DATA
 data_root: /home/user/GlioMT/data/Internal/
 label_root: /home/user/GlioMT/data/Internal_label.xlsx
@@ -85,7 +84,6 @@ task_name: "train"
 
 Validation Example for `configs/paths/TCGA.yaml`:
 ```
-
 # Validation DATA
 data_root: /home/user/GlioMT/data/TCGA/
 label_root: /home/user/GlioMT/data/TCGA_label.xlsx
@@ -95,23 +93,6 @@ task_name: "val"
 
 ## Training
 
-**CNN & Visual Transformer Models**
-```
-# Usage
-# bash ./scripts/run_train.sh {loss} {metric} {model} {cls_mode} {num_classes} {slice percentile}
-
-
-# IDH mutation
-bash ./scripts/run_train.sh bce binary resnet50 idh 1 75
-
-# 1p/19q codeletion
-bash ./scripts/run_train.sh bce binary vit_base 1p_19q 1 75
-
-# CNS WHO Grade
-bash ./scripts/run_train.sh ce multiclass resnet50 grade 3 25
-```
-
-**GlioMT**
 ```
 # Usage
 # bash ./scripts/run_train_GlioMT.sh {loss} {metric} {model} {cls_mode} {num_classes} {slice percentile}
@@ -132,17 +113,6 @@ Our code's argument modification is based on [Hydra](https://hydra.cc/). To cust
 
 
 ## Inference
-**CNN & Visual Transformer Models**
-```
-# Usage
-# bash ./scripts/run_eval.sh {metric} {model} {cls_mode} {num_classes} {slice percentile} {checkpoint_path}
-
-
-# IDH mutation
-bash ./scripts/run_eval.sh binary GlioMT_vit_base idh 1 75 ./exp/runs/idh/20240101/090000/
-```
-
-**GlioMT**
 ```
 # Usage
 # bash ./scripts/run_eval_GlioMT.sh {metric} {model} {cls_mode} {num_classes} {slice percentile} {checkpoint_path}
