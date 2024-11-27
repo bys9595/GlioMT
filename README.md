@@ -3,7 +3,7 @@
 ![alt man](./figures/main.png)
 
 
-This repo is the official implementation of **"An Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas"**.
+This repo is the official implementation of **"Interpretable Multimodal Transformer for Prediction of Molecular Subtypes and Grades in Adult-type Diffuse Gliomas"**.
 
 Yunsu Byeon*, Yae Won Park*, Soohyun Lee, Doohyun Park, HyungSeob Shin, Kyunghwa Han, Jong Hee Chang, Se Hoon Kim, Seung-Koo Lee, Sung Soo Ahn, Dosik Hwang
 
@@ -131,3 +131,10 @@ bash ./scripts/run_eval_GlioMT.sh binary GlioMT_vit_base idh 1 75 ./exp/runs/idh
 
 ## Interpretability Analysis
 [explainability.ipynb](./explainability.ipynb) is an example of interpretability analysis.
+
+## Citation ✏️ 📄
+If you find this repo useful for your research, please consider citing the paper as follows:
+
+```
+TBD
+```
