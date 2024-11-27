@@ -126,4 +126,4 @@ bash ./scripts/run_eval_GlioMT.sh binary GlioMT_vit_base idh 1 75 ./exp/runs/idh
 
 
 ## Interpretability Analysis
-[explainability.ipynb](./exp.ipynb) is an example of interpretability analysis.
+[explainability.ipynb](./explainability.ipynb) is an example of interpretability analysis.
