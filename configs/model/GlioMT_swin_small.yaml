@@ -6,13 +6,7 @@ pretrained_strict: False
 in_chans: 4
 num_classes: 1
 decoder_depth: 2
-clini_info_style: "bert"
-embed_trainable: False
 clini_embed_token: "word"
-fusion_style: "self-attn"
 age_cutoff: 45
-clini: True
-mm_num_heads: 1
-
 
   

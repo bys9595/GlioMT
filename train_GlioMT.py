@@ -351,6 +351,7 @@ def train(criterion, optimizer, net, epoch, train_loader, writer, scaler, cfg):
         inputs = data_dict['image'].cuda(non_blocking=True).float()
         targets = data_dict['label'].cuda(non_blocking=True)
         clinical_feats = data_dict['clinical_feats']
+        # print(clinical_feats)
         names = data_dict['name']
                         
         if cfg.model.num_classes ==1 :

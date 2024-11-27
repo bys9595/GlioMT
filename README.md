@@ -121,3 +121,7 @@ Our code's argument modification is based on [Hydra](https://hydra.cc/). To cust
 # IDH mutation
 bash ./scripts/run_eval_GlioMT.sh binary GlioMT_vit_base idh 1 75 ./exp/runs/idh/20240101/090000/
 ```
+
+
+## Interpretability Analysis
+[explainability.ipynb](./exp.ipynb) is an example of interpretability analysis.

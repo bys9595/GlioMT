@@ -4,3 +4,6 @@
 /data/TCGA
 /noneed
 /data
+/sample/TCGA_001
+/sample/UCSF-PDGM-0251
+/sample/checkpoint_best_auc.pth

@@ -46,21 +46,14 @@ class ClinicalViT(VisionTransformer):
     """
     def __init__(self, img_size=224, in_chans=3, num_classes=1,
                  patch_size=16, embed_dim=1024, depth=24, num_heads=16,
-                 decoder_depth=2, embed_trainable=False, 
-                 clini_info_style='bert', clini_embed_token='cls',
-                 fusion_style='self-attn', age_cutoff=45, clini=True):
+                 decoder_depth=2, clini_embed_token='cls', age_cutoff=45,):
         super().__init__(img_size=img_size, in_chans=in_chans, num_classes=num_classes, patch_size=patch_size, embed_dim=embed_dim, depth=depth, num_heads=num_heads)
         
         self.in_chans = in_chans
         self.patch_size = patch_size
         self.depth = depth
         self.num_heads = num_heads
-        self.fusion_style = fusion_style
         self.age_cutoff = age_cutoff
-        self.clini= clini
-        
-        self.clini_info_style = clini_info_style
-        self.embed_trainable = embed_trainable
         self.clini_embed_token = clini_embed_token
         
         if self.clini_embed_token == 'cls':
@@ -68,26 +61,16 @@ class ClinicalViT(VisionTransformer):
         elif self.clini_embed_token == 'word':
             self.clini_embed_token_idx = 7
         
-        if clini_info_style == 'bert':
-            if embed_dim==768:
-                key = "bert-base-uncased"
-            if embed_dim==1024:
-                key = "bert-large-uncased"
-            self.tokenizer = AutoTokenizer.from_pretrained(key)
-            self.embed_model = BertModel.from_pretrained(key)
-        elif clini_info_style == 'random':
-            self.clini_embedding = nn.Embedding(4, embed_dim)
+        if embed_dim==768:
+            key = "bert-base-uncased"
+        if embed_dim==1024:
+            key = "bert-large-uncased"
+        self.tokenizer = AutoTokenizer.from_pretrained(key)
+        self.embed_model = BertModel.from_pretrained(key)
         
         self.projector = nn.Linear(embed_dim+2, embed_dim)
         
-        # self.multimodal_cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
-        # nn.init.normal_(self.multimodal_cls_token, std=1e-6)
-        
-        if self.clini:
-            self.decoder_pos_embed = nn.Parameter(torch.randn(1, 3, embed_dim) * .02)
-        else:
-            self.decoder_pos_embed = nn.Parameter(torch.randn(1, 1, embed_dim) * .02)
-        
+        self.decoder_pos_embed = nn.Parameter(torch.randn(1, 3, embed_dim) * .02)
         trunc_normal_(self.decoder_pos_embed, std=.02)
         
         self.decoder_blocks = nn.Sequential(*[
@@ -104,80 +87,37 @@ class ClinicalViT(VisionTransformer):
         x = self.forward_features(x)
         out = x[:, 0] # cls token
         
-        if self.fusion_style == 'self-attn':
-            age_embed, sex_embed = self.forward_clinical_embed(clinical_feats)
-            if self.clini:
-                multi_modal_feats = torch.stack([out, age_embed, sex_embed], 1)
-                # ---
-                # cls_token = self.multimodal_cls_token.expand(out.shape[0], -1, -1)
-                # multi_modal_feats = torch.cat([cls_token, multi_modal_feats], 1)
-                # ---
-            else:
-                # cls_token = self.multimodal_cls_token.expand(out.shape[0], -1, -1)
-                # multi_modal_feats = torch.cat([cls_token, out.unsqueeze(1)], 1)
-                multi_modal_feats = out.unsqueeze(1)
-            
-            multi_modal_feats = multi_modal_feats + self.decoder_pos_embed
-            multi_modal_feats = self.decoder_blocks(multi_modal_feats)
-            out = self.decoder_norm(multi_modal_feats)
-            out = self.forward_head(out)
-        elif self.fusion_style == 'concat':
-            age = torch.tensor([int(i) for i in clinical_feats[0]]).cuda().unsqueeze(1)
-            age = (age - 55) / 15
-            sex = torch.tensor([1 if i == 'male' else -1 for i in clinical_feats[1]]).cuda().unsqueeze(1)
-            
-            multi_modal_feats = torch.cat((out, age, sex), 1)
-            multi_modal_feats = self.projector(multi_modal_feats)
-            out = self.decoder_norm(multi_modal_feats)
-            
-            out = self.fc_norm(out)
-            out = self.head_drop(out)
-            out = self.head(out)
-                        
+        age_embed, sex_embed = self.forward_clinical_embed(clinical_feats)
+        multi_modal_feats = torch.stack([out, age_embed, sex_embed], 1)
+
+        multi_modal_feats = multi_modal_feats + self.decoder_pos_embed
+        multi_modal_feats = self.decoder_blocks(multi_modal_feats)
+        out = self.decoder_norm(multi_modal_feats)
+        out = self.forward_head(out)
         return out
     
     
     def forward_clinical_embed(self, clinical_feats):
-        import math
         age = clinical_feats[0]
         sex = clinical_feats[1]
         
         age = ['an old' if int(i)>=self.age_cutoff else 'a young' for i in age]
 
-        if self.clini_info_style == 'bert':
-            age_prompt = ['a magnetic resonance image of ' + age[i] + ' patient' for i in range(len(age))]
-            sex_prompt = ['a magnetic resonance image of a ' + sex[i] + ' patient' for i in range(len(sex))]
-            
-            age_token = self.tokenizer(age_prompt, return_tensors="pt", padding=True, truncation=True)
-            sex_token = self.tokenizer(sex_prompt, return_tensors="pt")
-
-            age_token = {k: v.cuda() for k, v in age_token.items()}
-            sex_token = {k: v.cuda() for k, v in sex_token.items()}
-            
-            if self.embed_trainable:
-                self.embed_model.eval()
-                age_embed = self.embed_model(**age_token).last_hidden_state[:, self.clini_embed_token_idx]
-                sex_embed = self.embed_model(**sex_token).last_hidden_state[:, self.clini_embed_token_idx]
-            else:
-                self.embed_model.eval()
-                with torch.no_grad():                      
-                    age_embed = self.embed_model(**age_token).last_hidden_state[:, self.clini_embed_token_idx]
-                    sex_embed = self.embed_model(**sex_token).last_hidden_state[:, self.clini_embed_token_idx]
-                
-        elif self.clini_info_style == 'random':
-            age_idx = [0 if i == 'an old' else 1 for i in age]
-            sex_idx = [2 if i == 'male' else 3 for i in sex]
-            
-            if self.embed_trainable:
-                age_embed = self.clini_embedding(torch.Tensor(age_idx).long().cuda())
-                sex_embed = self.clini_embedding(torch.Tensor(sex_idx).long().cuda())
-            else:
-                self.clini_embedding.eval()
-                with torch.no_grad():                      
-                    age_embed = self.clini_embedding(torch.Tensor(age_idx).long().cuda())
-                    sex_embed = self.clini_embedding(torch.Tensor(sex_idx).long().cuda())
+        age_prompt = ['a magnetic resonance image of ' + age[i] + ' patient' for i in range(len(age))]
+        sex_prompt = ['a magnetic resonance image of a ' + sex[i] + ' patient' for i in range(len(sex))]
         
-        # return age_embed
+        age_token = self.tokenizer(age_prompt, return_tensors="pt", padding=True, truncation=True)
+        sex_token = self.tokenizer(sex_prompt, return_tensors="pt")
+
+        age_token = {k: v.cuda() for k, v in age_token.items()}
+        sex_token = {k: v.cuda() for k, v in sex_token.items()}
+        
+
+        self.embed_model.eval()
+        with torch.no_grad():                      
+            age_embed = self.embed_model(**age_token).last_hidden_state[:, self.clini_embed_token_idx]
+            sex_embed = self.embed_model(**sex_token).last_hidden_state[:, self.clini_embed_token_idx]
+                
         return age_embed, sex_embed
 
 
@@ -187,8 +127,6 @@ def _create_vision_transformer(variant, pretrained=False, **kwargs):
         raise RuntimeError('features_only not implemented for Vision Transformer models.')
 
     if 'flexi' in variant:
-        # FIXME Google FlexiViT pretrained models have a strong preference for bilinear patch / embed
-        # interpolation, other pretrained models resize better w/ anti-aliased bicubic interpolation.
         _filter_fn = partial(checkpoint_filter_fn, interpolation='bilinear', antialias=False)
     else:
         _filter_fn = checkpoint_filter_fn

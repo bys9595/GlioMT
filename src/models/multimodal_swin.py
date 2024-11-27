@@ -28,46 +28,33 @@ class ClinicalSwinT(SwinTransformer):
     """
     def __init__(self, img_size=224, in_chans=3, num_classes=1, window_size=7,
                  patch_size=4, embed_dim=96, depths=(2, 2, 6, 2), num_heads=(3, 6, 12, 24),
-                 decoder_depth=2, clini_info_style='bert', embed_trainable=False, clini_embed_token='cls',
-                 fusion_style='self-attn', age_cutoff=45, clini=True, mm_num_heads=1):
+                 decoder_depth=2, clini_embed_token='cls', age_cutoff=45):
         super().__init__(img_size=img_size, in_chans=in_chans, window_size=window_size, 
                          num_classes=num_classes, patch_size=patch_size, embed_dim=embed_dim, depths=depths, num_heads=num_heads)
-        
-        
-        self.clini_info_style = clini_info_style
-        self.embed_trainable = embed_trainable
-        self.clini_embed_token = clini_embed_token
-        self.fusion_style = fusion_style
+
+        self.in_chans = in_chans
+        self.patch_size = patch_size
+        self.depth = depths
+        self.num_heads = num_heads
         self.age_cutoff = age_cutoff
-        self.clini= clini
-        self.mm_num_heads= mm_num_heads
+        self.clini_embed_token = clini_embed_token
         
         if self.clini_embed_token == 'cls':
             self.clini_embed_token_idx = 0
         elif self.clini_embed_token == 'word':
             self.clini_embed_token_idx = 7
         
-        if clini_info_style == 'bert':
-            if self.num_features==768:
-                key = "bert-base-uncased"
-            if self.num_features==1024:
-                key = "bert-large-uncased"
-            self.tokenizer = AutoTokenizer.from_pretrained(key)
-            self.embed_model = BertModel.from_pretrained(key)
-        elif clini_info_style == 'random':
-            self.clini_embedding = nn.Embedding(4, self.num_features)
-        
+        if self.num_features==768:
+            key = "bert-base-uncased"
+        if self.num_features==1024:
+            key = "bert-large-uncased"
+        self.tokenizer = AutoTokenizer.from_pretrained(key)
+        self.embed_model = BertModel.from_pretrained(key)
+
         self.projector = nn.Linear(self.num_features+2, self.num_features)
-        # self.predecoder_norm = nn.LayerNorm(768, eps=1e-6)
+
         
-        # self.multimodal_cls_token = nn.Parameter(torch.zeros(1, 1, self.num_features))
-        # nn.init.normal_(self.multimodal_cls_token, std=1e-6)
-        
-        if self.clini:
-            self.decoder_pos_embed = nn.Parameter(torch.randn(1, 3, self.num_features) * .02)
-        else:
-            self.decoder_pos_embed = nn.Parameter(torch.randn(1, 1, self.num_features) * .02)
-        
+        self.decoder_pos_embed = nn.Parameter(torch.randn(1, 3, self.num_features) * .02)
         trunc_normal_(self.decoder_pos_embed, std=.02)
         
         self.pool_feat = SelectAdaptivePool2d(
@@ -78,7 +65,7 @@ class ClinicalSwinT(SwinTransformer):
         
         self.decoder_blocks = nn.Sequential(*[
             Block(dim=self.num_features,
-                num_heads=mm_num_heads,
+                num_heads=1,
                 qkv_bias=True
                 )
             for i in range(decoder_depth)])
@@ -91,92 +78,36 @@ class ClinicalSwinT(SwinTransformer):
         
         x = self.forward_features(x)
         x = self.forward_head(x, pre_logits=True)
-        # x = self.predecoder_norm(x)
-        # x = self.norm_proj(self.projector(x))
         
-        if self.fusion_style == 'self-attn':
-            if self.clini:
-                multi_modal_feats = torch.stack([x, age_embed, sex_embed], 1)
-                # ---
-                # cls_token = self.multimodal_cls_token.expand(x.shape[0], -1, -1)
-                # multi_modal_feats = torch.cat([cls_token, multi_modal_feats], 1)
-                # ---
-            else:
-                # cls_token = self.multimodal_cls_token.expand(x.shape[0], -1, -1)
-                # multi_modal_feats = torch.cat([cls_token, x.unsqueeze(1)], 1)
-                multi_modal_feats = x.unsqueeze(1)
-                    
-                    
-            multi_modal_feats = multi_modal_feats + self.decoder_pos_embed
-            multi_modal_feats = self.decoder_blocks(multi_modal_feats)
-            multi_modal_feats = self.decoder_norm(multi_modal_feats)
-        
-            cls_token = multi_modal_feats[:, 0]
-            out = self.head.flatten(self.head.fc(cls_token))
-        
-        elif self.fusion_style == 'concat':
-            age = torch.tensor([int(i) for i in clinical_feats[0]]).cuda().unsqueeze(1)
-            age = (age - 55) / 15
-            sex = torch.tensor([1 if i == 'male' else -1 for i in clinical_feats[1]]).cuda().unsqueeze(1)
-            
-            multi_modal_feats = torch.cat((x, age, sex), 1)
-            multi_modal_feats = self.projector(multi_modal_feats)
-            out = self.decoder_norm(multi_modal_feats)
-            
-            out = self.head.flatten(self.head.fc(out))
-                
-
+        multi_modal_feats = torch.stack([x, age_embed, sex_embed], 1)               
+        multi_modal_feats = multi_modal_feats + self.decoder_pos_embed
+        multi_modal_feats = self.decoder_blocks(multi_modal_feats)
+        multi_modal_feats = self.decoder_norm(multi_modal_feats)
+    
+        cls_token = multi_modal_feats[:, 0]
+        out = self.head.flatten(self.head.fc(cls_token))
         return out
     
-
-    
     def forward_clinical_embed(self, clinical_feats):
-        import math
         age = clinical_feats[0]
         sex = clinical_feats[1]
         
         age = ['an old' if int(i)>=self.age_cutoff else 'a young' for i in age]
 
-        if self.clini_info_style == 'bert':
-            age_prompt = ['a magnetic resonance image of ' + age[i] + ' patient' for i in range(len(age))]
-            sex_prompt = ['a magnetic resonance image of a ' + sex[i] + ' patient' for i in range(len(sex))]
-            
-            # # age_list = ['zeros', 'teens', 'twenties', 'thirties', '40s', 'fifties', 'sixties', 'seventies', 'eighties', 'nineties', 'hundreds']
-            # age_list = ['0s', '10s', '20s', '30s', '40s', '50s', '60s', '70s', '80s', '90s', '100s']
-
-            # age_prompt = ['A patient in their ' + age_list[math.floor(int(age[i])/10)] for i in range(len(age))]
-            # sex_prompt = ['A ' + sex[i] + ' patient' for i in range(len(sex))]
-                    
-            age_token = self.tokenizer(age_prompt, return_tensors="pt", padding=True, truncation=True)
-            sex_token = self.tokenizer(sex_prompt, return_tensors="pt")
-
-            age_token = {k: v.cuda() for k, v in age_token.items()}
-            sex_token = {k: v.cuda() for k, v in sex_token.items()}
-            
-            if self.embed_trainable:
-                self.embed_model.eval()
-                age_embed = self.embed_model(**age_token).last_hidden_state[:, self.clini_embed_token_idx]
-                sex_embed = self.embed_model(**sex_token).last_hidden_state[:, self.clini_embed_token_idx]
-            else:
-                self.embed_model.eval()
-                with torch.no_grad():                      
-                    age_embed = self.embed_model(**age_token).last_hidden_state[:, self.clini_embed_token_idx]
-                    sex_embed = self.embed_model(**sex_token).last_hidden_state[:, self.clini_embed_token_idx]
+        age_prompt = ['a magnetic resonance image of ' + age[i] + ' patient' for i in range(len(age))]
+        sex_prompt = ['a magnetic resonance image of a ' + sex[i] + ' patient' for i in range(len(sex))]
                 
-        elif self.clini_info_style == 'random':
-            age_idx = [0 if i == 'an old' else 1 for i in age]
-            sex_idx = [2 if i == 'male' else 3 for i in sex]
-            
-            if self.embed_trainable:
-                age_embed = self.clini_embedding(torch.Tensor(age_idx).long().cuda())
-                sex_embed = self.clini_embedding(torch.Tensor(sex_idx).long().cuda())
-            else:
-                self.clini_embedding.eval()
-                with torch.no_grad():                      
-                    age_embed = self.clini_embedding(torch.Tensor(age_idx).long().cuda())
-                    sex_embed = self.clini_embedding(torch.Tensor(sex_idx).long().cuda())
+        age_token = self.tokenizer(age_prompt, return_tensors="pt", padding=True, truncation=True)
+        sex_token = self.tokenizer(sex_prompt, return_tensors="pt")
+
+        age_token = {k: v.cuda() for k, v in age_token.items()}
+        sex_token = {k: v.cuda() for k, v in sex_token.items()}
         
-        # return age_embed
+        self.embed_model.eval()
+        with torch.no_grad():                      
+            age_embed = self.embed_model(**age_token).last_hidden_state[:, self.clini_embed_token_idx]
+            sex_embed = self.embed_model(**sex_token).last_hidden_state[:, self.clini_embed_token_idx]
+
         return age_embed, sex_embed
 
 
