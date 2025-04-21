@@ -136,5 +136,14 @@ bash ./scripts/run_eval_GlioMT.sh binary GlioMT_vit_base idh 1 75 ./exp/runs/idh
 If you find this repo useful for your research, please consider citing the paper as follows:
 
 ```
-TBD
+@article{byeon2025interpretable,
+  title={Interpretable multimodal transformer for prediction of molecular subtypes and grades in adult-type diffuse gliomas},
+  author={Byeon, Yunsu and Park, Yae Won and Lee, Soohyun and Park, Doohyun and Shin, HyungSeob and Han, Kyunghwa and Chang, Jong Hee and Kim, Se Hoon and Lee, Seung-Koo and Ahn, Sung Soo and others},
+  journal={NPJ Digital Medicine},
+  volume={8},
+  number={1},
+  pages={140},
+  year={2025},
+  publisher={Nature Publishing Group UK London}
+}
 ```
